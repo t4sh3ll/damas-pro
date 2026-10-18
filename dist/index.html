@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Damas Pro - Jogo Profissional de Damas</title>
+    <meta name="description" content="Jogo profissional de damas com IA, modo treino e competição">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script type="module" crossorigin src="/damas-pro/assets/index-3jNVFpCb.js"></script>
+  <link rel="stylesheet" crossorigin href="/damas-pro/assets/index-6JS6tMiI.css">
+</head>
+<body>
+    <div id="app">
+        <header class="header">
+            <div class="header__content">
+                <h1 class="header__title">♔ Damas Pro ♚</h1>
+                <nav class="header__nav">
+                    <button class="btn btn--primary" data-action="new-game">Novo Jogo</button>
+                    <button class="btn btn--secondary" data-action="settings">Configurações</button>
+                    <button class="btn btn--secondary" data-action="help">Ajuda</button>
+                </nav>
+            </div>
+        </header>
+
+        <main class="main">
+            <div class="game-container">
+                <aside class="sidebar sidebar--left">
+                    <div class="player-card player-card--white">
+                        <div class="player-card__info">
+                            <span class="player-card__name">Jogador 1</span>
+                            <span class="player-card__score" data-player="white">0</span>
+                        </div>
+                        <div class="player-card__pieces">
+                            <span class="piece-count">🎯 <span data-pieces="white">12</span> peças</span>
+                        </div>
+                    </div>
+
+                    <div class="game-info">
+                        <h3>⏱️ Tempo</h3>
+                        <div class="timer" data-timer="white">10:00</div>
+                    </div>
+
+                    <div class="move-history">
+                        <h3>📜 Movimentos</h3>
+                        <ul class="move-list" id="moveList"></ul>
+                    </div>
+                </aside>
+
+                <section class="board-section">
+                    <div class="board-wrapper">
+                        <div class="board" id="board" role="grid" aria-label="Tabuleiro de damas"></div>
+                    </div>
+                    <div class="game-controls">
+                        <button class="btn btn--primary" id="btnNewGame">🎮 Novo Jogo</button>
+                        <button class="btn btn--secondary" id="btnUndo">↩️ Desfazer</button>
+                        <button class="btn btn--secondary" id="btnHint">💡 Dica</button>
+                        <button class="btn btn--secondary" id="btnAnimate">✨ Animar</button>
+                    </div>
+                </section>
+
+                <aside class="sidebar sidebar--right">
+                    <div class="player-card player-card--black">
+                        <div class="player-card__info">
+                            <span class="player-card__name">Jogador 2</span>
+                            <span class="player-card__score" data-player="black">0</span>
+                        </div>
+                        <div class="player-card__pieces">
+                            <span class="piece-count">🎯 <span data-pieces="black">12</span> peças</span>
+                        </div>
+                    </div>
+
+                    <div class="game-info">
+                        <h3>⏱️ Tempo</h3>
+                        <div class="timer" data-timer="black">10:00</div>
+                    </div>
+
+                    <div class="combos">
+                        <h3>📚 Combinações</h3>
+                        <select id="comboSelect" class="select">
+                            <option value="">Selecione...</option>
+                            <option value="classic">Abertura Clássica</option>
+                            <option value="double-capture">Ataque Duplo</option>
+                            <option value="promotion">Captura em Coroa</option>
+                            <option value="sacrifice">Sacrifício Estratégico</option>
+                        </select>
+                        <button class="btn btn--small" id="btnLoadCombo">Carregar</button>
+                    </div>
+                </aside>
+            </div>
+
+            <div class="modal modal--hidden" id="gameOverModal">
+                <div class="modal__content">
+                    <h2>🏆 Fim de Jogo!</h2>
+                    <p id="winnerText">Jogador 1 venceu!</p>
+                    <div class="modal__actions">
+                        <button class="btn btn--primary" data-action="new-game">Novo Jogo</button>
+                        <button class="btn btn--secondary" data-action="review">Revisar Partida</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Criado com REA + Harness² | Damas Pro v1.0</p>
+        </footer>
+    </div>
+
+</body>
+</html>

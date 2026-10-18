@@ -14,14 +14,15 @@
     "analyze": "rea analyze ./src --output ./evidence",
     "benchmark": "harness2 --bench custom-damas --k 5 --mode parallel"
   },
-  "keywords": ["damas", "checkers", "game", "board-game"],
+  "keywords": [
+    "damas",
+    "checkers",
+    "game",
+    "board-game"
+  ],
   "author": "ML Soluções",
   "license": "MIT",
-  "dependencies": {
-    "express": "^4.18.2",
-    "sqlite3": "^5.1.6",
-    "ws": "^8.16.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@vitejs/plugin-basic-ssl": "^1.1.0",
     "cypress": "^13.6.0",

@@ -6,12 +6,11 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: true,
     rollupOptions: {
+      input: './index.html',
       output: {
-        manualChunks: {
-          vendor: ['express', 'sqlite3'],
-          game: ['./src/game/Core.js', './src/game/Engine.js'],
-          ui: ['./src/components/Board.js', './src/components/Piece.js']
-        }
+        entryFileNames: 'assets/[name]-[hash].js',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash].[ext]'
       }
     }
   },

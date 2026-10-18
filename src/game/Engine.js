@@ -338,6 +338,4 @@ class GameEngine {
 }
 
 // Export for module system
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = GameEngine;
-}
+export default GameEngine;

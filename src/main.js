@@ -128,6 +128,4 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Export for testing
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = DamasPro;
-}
+export default DamasPro;

@@ -328,6 +328,4 @@ class BoardComponent {
 }
 
 // Export for module system
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = BoardComponent;
-}
+export default BoardComponent;
