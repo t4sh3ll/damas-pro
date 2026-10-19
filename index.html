@@ -4,107 +4,241 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Damas Pro - Jogo Profissional de Damas</title>
-    <meta name="description" content="Jogo profissional de damas com IA, modo treino e competição">
-    <link rel="stylesheet" href="styles/main.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 20px;
+        }
+        h1 { margin-bottom: 20px; font-size: 2.5em; }
+        .board { 
+            display: grid; 
+            grid-template-columns: repeat(8, 60px); 
+            grid-template-rows: repeat(8, 60px);
+            border: 4px solid #ffd700;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .square { 
+            width: 60px; 
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .square.light { background: #f0d9b5; }
+        .square.dark { background: #b58863; }
+        .square:hover { opacity: 0.9; }
+        .piece { 
+            font-size: 1.2em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            user-select: none;
+        }
+        .info { 
+            margin-top: 20px; 
+            text-align: center;
+            font-size: 1.2em;
+        }
+        .controls { 
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #ffd700;
+            color: #1a1a2e;
+            font-weight: bold;
+        }
+        button:hover { background: #ffed4a; }
+    </style>
 </head>
 <body>
-    <div id="app">
-        <header class="header">
-            <div class="header__content">
-                <h1 class="header__title">♔ Damas Pro ♚</h1>
-                <nav class="header__nav">
-                    <button class="btn btn--primary" data-action="new-game">Novo Jogo</button>
-                    <button class="btn btn--secondary" data-action="settings">Configurações</button>
-                    <button class="btn btn--secondary" data-action="help">Ajuda</button>
-                </nav>
-            </div>
-        </header>
-
-        <main class="main">
-            <div class="game-container">
-                <aside class="sidebar sidebar--left">
-                    <div class="player-card player-card--white">
-                        <div class="player-card__info">
-                            <span class="player-card__name">Jogador 1</span>
-                            <span class="player-card__score" data-player="white">0</span>
-                        </div>
-                        <div class="player-card__pieces">
-                            <span class="piece-count">🎯 <span data-pieces="white">12</span> peças</span>
-                        </div>
-                    </div>
-
-                    <div class="game-info">
-                        <h3>⏱️ Tempo</h3>
-                        <div class="timer" data-timer="white">10:00</div>
-                    </div>
-
-                    <div class="move-history">
-                        <h3>📜 Movimentos</h3>
-                        <ul class="move-list" id="moveList"></ul>
-                    </div>
-                </aside>
-
-                <section class="board-section">
-                    <div class="board-wrapper">
-                        <div class="board" id="board" role="grid" aria-label="Tabuleiro de damas"></div>
-                    </div>
-                    <div class="game-controls">
-                        <button class="btn btn--primary" id="btnNewGame">🎮 Novo Jogo</button>
-                        <button class="btn btn--secondary" id="btnUndo">↩️ Desfazer</button>
-                        <button class="btn btn--secondary" id="btnHint">💡 Dica</button>
-                        <button class="btn btn--secondary" id="btnAnimate">✨ Animar</button>
-                    </div>
-                </section>
-
-                <aside class="sidebar sidebar--right">
-                    <div class="player-card player-card--black">
-                        <div class="player-card__info">
-                            <span class="player-card__name">Jogador 2</span>
-                            <span class="player-card__score" data-player="black">0</span>
-                        </div>
-                        <div class="player-card__pieces">
-                            <span class="piece-count">🎯 <span data-pieces="black">12</span> peças</span>
-                        </div>
-                    </div>
-
-                    <div class="game-info">
-                        <h3>⏱️ Tempo</h3>
-                        <div class="timer" data-timer="black">10:00</div>
-                    </div>
-
-                    <div class="combos">
-                        <h3>📚 Combinações</h3>
-                        <select id="comboSelect" class="select">
-                            <option value="">Selecione...</option>
-                            <option value="classic">Abertura Clássica</option>
-                            <option value="double-capture">Ataque Duplo</option>
-                            <option value="promotion">Captura em Coroa</option>
-                            <option value="sacrifice">Sacrifício Estratégico</option>
-                        </select>
-                        <button class="btn btn--small" id="btnLoadCombo">Carregar</button>
-                    </div>
-                </aside>
-            </div>
-
-            <div class="modal modal--hidden" id="gameOverModal">
-                <div class="modal__content">
-                    <h2>🏆 Fim de Jogo!</h2>
-                    <p id="winnerText">Jogador 1 venceu!</p>
-                    <div class="modal__actions">
-                        <button class="btn btn--primary" data-action="new-game">Novo Jogo</button>
-                        <button class="btn btn--secondary" data-action="review">Revisar Partida</button>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <footer class="footer">
-            <p>Criado com REA + Harness² | Damas Pro v1.0</p>
-        </footer>
+    <h1>♔ Damas Pro ♚</h1>
+    <div class="board" id="board"></div>
+    <div class="info" id="info">Vez do: Jogador 1 (Brancas)</div>
+    <div class="controls">
+        <button onclick="newGame()">Novo Jogo</button>
+        <button onclick="getHint()">Dica</button>
     </div>
-
-    <script type="module" src="./src/main.js"></script>
+    
+    <script>
+        let board = [];
+        let currentPlayer = 'white';
+        let selectedPiece = null;
+        let validMoves = [];
+        
+        function initBoard() {
+            board = Array(8).fill(null).map(() => Array(8).fill(null));
+            
+            for (let row = 0; row < 3; row++) {
+                for (let col = 0; col < 8; col++) {
+                    if ((row + col) % 2 === 1) {
+                        board[row][col] = { player: 'white', isKing: false };
+                    }
+                }
+            }
+            
+            for (let row = 5; row < 8; row++) {
+                for (let col = 0; col < 8; col++) {
+                    if ((row + col) % 2 === 1) {
+                        board[row][col] = { player: 'black', isKing: false };
+                    }
+                }
+            }
+            
+            currentPlayer = 'white';
+            selectedPiece = null;
+            validMoves = [];
+            renderBoard();
+            updateInfo();
+        }
+        
+        function renderBoard() {
+            const boardEl = document.getElementById('board');
+            boardEl.innerHTML = '';
+            
+            for (let row = 0; row < 8; row++) {
+                for (let col = 0; col < 8; col++) {
+                    const square = document.createElement('div');
+                    const isLight = (row + col) % 2 === 0;
+                    square.className = `square ${isLight ? 'light' : 'dark'}`;
+                    
+                    const isValidMove = validMoves.some(m => m.to.row === row && m.to.col === col);
+                    if (isValidMove) {
+                        square.style.boxShadow = 'inset 0 0 20px rgba(255,215,0,0.8)';
+                    }
+                    
+                    if (selectedPiece && selectedPiece.row === row && selectedPiece.col === col) {
+                        square.style.boxShadow = 'inset 0 0 20px rgba(255,215,0,0.5)';
+                    }
+                    
+                    const piece = board[row][col];
+                    if (piece) {
+                        const pieceEl = document.createElement('span');
+                        pieceEl.className = 'piece';
+                        pieceEl.textContent = piece.isKing ? '♚' : '♟';
+                        pieceEl.style.color = piece.player === 'white' ? '#fff' : '#000';
+                        square.appendChild(pieceEl);
+                    }
+                    
+                    square.addEventListener('click', () => handleClick(row, col));
+                    boardEl.appendChild(square);
+                }
+            }
+        }
+        
+        function handleClick(row, col) {
+            const piece = board[row][col];
+            
+            if (piece && piece.player === currentPlayer) {
+                selectedPiece = { row, col };
+                validMoves = getValidMoves(row, col);
+                renderBoard();
+                return;
+            }
+            
+            if (selectedPiece) {
+                const move = validMoves.find(m => m.to.row === row && m.to.col === col);
+                if (move) {
+                    executeMove(move);
+                }
+            }
+        }
+        
+        function getValidMoves(row, col) {
+            const piece = board[row][col];
+            if (!piece) return [];
+            
+            const moves = [];
+            const directions = piece.isKing 
+                ? [[-1,-1], [-1,1], [1,-1], [1,1]]
+                : piece.player === 'white' ? [[-1,-1], [-1,1]] : [[1,-1], [1,1]];
+            
+            for (const [dr, dc] of directions) {
+                const newRow = row + dr;
+                const newCol = col + dc;
+                if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8 && !board[newRow][newCol]) {
+                    moves.push({ from: {row, col}, to: {row: newRow, col: newCol}, capture: null });
+                }
+            }
+            
+            for (const [dr, dc] of directions) {
+                const jumpRow = row + dr * 2;
+                const jumpCol = col + dc * 2;
+                const midRow = row + dr;
+                const midCol = col + dc;
+                
+                if (jumpRow >= 0 && jumpRow < 8 && jumpCol >= 0 && jumpCol < 8 &&
+                    !board[jumpRow][jumpCol] && board[midRow][midCol] && board[midRow][midCol].player !== piece.player) {
+                    moves.push({ from: {row, col}, to: {row: jumpRow, col: jumpCol}, capture: {row: midRow, col: midCol} });
+                }
+            }
+            
+            return moves;
+        }
+        
+        function executeMove(move) {
+            const piece = board[move.from.row][move.from.col];
+            board[move.to.row][move.to.col] = piece;
+            board[move.from.row][move.from.col] = null;
+            
+            if (move.capture) {
+                board[move.capture.row][move.capture.col] = null;
+            }
+            
+            if (piece.player === 'white' && move.to.row === 0) piece.isKing = true;
+            if (piece.player === 'black' && move.to.row === 7) piece.isKing = true;
+            
+            currentPlayer = currentPlayer === 'white' ? 'black' : 'white';
+            selectedPiece = null;
+            validMoves = [];
+            
+            renderBoard();
+            updateInfo();
+        }
+        
+        function updateInfo() {
+            const info = document.getElementById('info');
+            info.textContent = `Vez do: Jogador ${currentPlayer === 'white' ? '1 (Brancas)' : '2 (Pretas)'}`;
+        }
+        
+        function newGame() {
+            initBoard();
+        }
+        
+        function getHint() {
+            for (let row = 0; row < 8; row++) {
+                for (let col = 0; col < 8; col++) {
+                    const piece = board[row][col];
+                    if (piece && piece.player === currentPlayer) {
+                        const moves = getValidMoves(row, col);
+                        if (moves.length > 0) {
+                            selectedPiece = { row, col };
+                            validMoves = [moves[0]];
+                            renderBoard();
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        
+        initBoard();
+    </script>
 </body>
 </html>
